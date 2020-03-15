@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import Vant from 'vant' // 组件库
 import 'vant/lib/index.css'
+import 'amfe-flexible'
 Vue.use(Vant)
 
 Vue.config.productionTip = false

@@ -14,3 +14,8 @@ export default {
   components: {}
 }
 </script>
+<style scoped>
+.home {
+  font-size: 20px;
+}
+</style>
