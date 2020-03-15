@@ -1,6 +1,6 @@
 <template>
-  <div>
-      小智
+  <div class="container">
+    <van-nav-bar title="小智同学" left-arrow @click-left="$router.go(-1)"></van-nav-bar>
   </div>
 </template>
 
