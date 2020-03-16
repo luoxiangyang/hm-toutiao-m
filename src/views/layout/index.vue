@@ -15,7 +15,7 @@
     </div>
 
     <!-- 标签栏 -->
-    <van-tabbar router >
+    <van-tabbar route >
       <van-tabbar-item icon="home-o" to="/">首页</van-tabbar-item>
       <van-tabbar-item icon="chat-o" to="/question">问答</van-tabbar-item>
       <van-tabbar-item icon="tv-o" to="/video">视频</van-tabbar-item>
