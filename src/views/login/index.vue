@@ -3,20 +3,67 @@
     <van-nav-bar title="登录" left-arrow @click-left="$router.go(-1)"></van-nav-bar>
     <!-- 输入框 -->
     <van-cell-group>
-      <van-field label="手机号" placeholder="请输入手机号"></van-field>
-      <van-field label="验证码" placeholder="请输入验证码">
+      <van-field @blur="checkMobile" :error-message="errorMessage.mobile" v-model.trim="loginForm.mobile" label="手机号" placeholder="请输入手机号"></van-field>
+      <van-field @blur="checkCode" :error-message="errorMessage.code" v-model.trim="loginForm.code" label="验证码" placeholder="请输入验证码">
         <van-button slot="button" size="small" type="primary">发送验证码</van-button>
       </van-field>
     </van-cell-group>
     <div class="login-box">
-          <van-button type="info" block  round size="small" >登录</van-button>
+          <van-button @click="login" type="info" block  round size="small" >登录</van-button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      // 表单数据
+      loginForm: {
+        mobile: '',
+        code: ''
+      },
+      errorMessage: {
+        mobile: '',
+        code: ''
+      }
 
+    }
+  },
+  methods: {
+    login () {
+      // 如果都通过就表示通过校验
+      if (this.checkMobile() && this.checkCode()) {
+
+      }
+    },
+    checkMobile () {
+      if (!this.loginForm.mobile) {
+        this.errorMessage.mobile = '手机号不能为空'
+        return false // false表示此轮校验没通过
+      }
+      // 如果不满足正则 就返回错误信息
+      if (!/^1[3-9]\d{9}$/.test(this.loginForm.mobile)) {
+        this.errorMessage.mobile = '手机号格式不正确'
+        return false
+      }
+      this.errorMessage.mobile = ''
+      return true
+    },
+    checkCode () {
+      if (!this.loginForm.code) {
+        this.errorMessage.code = '验证码不能为空'
+        return false
+      }
+      // 如果不满足正则 就返回错误信息
+      if (!/^\d{6}$/.test(this.loginForm.code)) {
+        this.errorMessage.code = '验证码必须为6位数字'
+        return false
+      }
+      this.errorMessage.code = ''
+      return true
+    }
+  }
 }
 </script>
 
