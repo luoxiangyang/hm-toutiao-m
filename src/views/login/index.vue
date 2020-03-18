@@ -36,8 +36,9 @@ export default {
     ...mapMutations(['uploadUser']),
     async login () {
       // 如果都通过就表示通过校验
-
-      if (this.checkMobile() && this.checkCode()) {
+      const checkMobile = this.checkMobile()
+      const checkCode = this.checkCode()
+      if (checkMobile && checkCode) {
         try {
           // 引用过来的方法传入参数
           const result = await login(this.loginForm)
@@ -49,10 +50,11 @@ export default {
           const { redirectUrl } = this.$route.query // 获取地址带的query参数
           this.$router.push(redirectUrl || '/')
         } catch (error) {
-          this.$notify({
-            message: '手机号或验证码错误',
-            duration: 1000
-          })
+          // this.$notify({
+          //   message: '手机号或验证码错误',
+          //   duration: 1000
+          // })
+          this.$mynotify({ message: '手机号或验证码错误' })
         }
       }
     },
