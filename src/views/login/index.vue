@@ -15,13 +15,15 @@
 </template>
 
 <script>
+import { login } from '@/api/user'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
       // 表单数据
       loginForm: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
       errorMessage: {
         mobile: '',
@@ -31,10 +33,27 @@ export default {
     }
   },
   methods: {
-    login () {
+    ...mapMutations(['uploadUser']),
+    async login () {
       // 如果都通过就表示通过校验
-      if (this.checkMobile() && this.checkCode()) {
 
+      if (this.checkMobile() && this.checkCode()) {
+        try {
+          // 引用过来的方法传入参数
+          const result = await login(this.loginForm)
+          // 修改vuex的state 必须通过mutations
+          console.log(result)
+
+          this.uploadUser({ user: result })
+          // 判断又没要跳转的页面 如果有就跳转
+          const { redirectUrl } = this.$route.query // 获取地址带的query参数
+          this.$router.push(redirectUrl || '/')
+        } catch (error) {
+          this.$notify({
+            message: '手机号或验证码错误',
+            duration: 1000
+          })
+        }
       }
     },
     checkMobile () {

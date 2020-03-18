@@ -2,7 +2,7 @@
 
 const USER_TOKEN = 'heima-toutiao-mobile-94' // 专门用来存储用户信息
 // 设置用户的token
-export function setUSer (user) {
+export function setUser (user) {
   window.localStorage.setItem(USER_TOKEN, JSON.stringify(user))
 }
 // 获取token
