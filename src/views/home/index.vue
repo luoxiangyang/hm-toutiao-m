@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <van-tabs>
-      <van-tab :title="item" v-for="item in 10" :key="item">
+      <van-tab  :title="item.name" v-for="item in channels" :key="item.id">
 
-        <ArticleList> </ArticleList>
+        <ArticleList :channels_id="item.id"> </ArticleList>
       </van-tab>
     </van-tabs>
     <span class="bar_btn">
@@ -14,10 +14,27 @@
 
 <script>
 import ArticleList from './components/article-list'
+import { getMyChannels } from '@/api/channels.js'
 export default {
   components: {
     ArticleList
+  },
+  data () {
+    return {
+      channels: []
+    }
+  },
+  methods: {
+    async getMyChannels () {
+      const data = await getMyChannels()
+      // 从接口获取的数据给
+      this.channels.push(...data.channels)
+    }
+  },
+  created () {
+    this.getMyChannels()
   }
+
 }
 </script>
 <style lang="less" scoped>
