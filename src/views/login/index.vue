@@ -43,7 +43,7 @@ export default {
           // 引用过来的方法传入参数
           const result = await login(this.loginForm)
           // 修改vuex的state 必须通过mutations
-          console.log(result)
+          // console.log(result)
 
           this.uploadUser({ user: result })
           // 判断又没要跳转的页面 如果有就跳转

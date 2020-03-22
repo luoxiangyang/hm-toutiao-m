@@ -13,9 +13,9 @@
               <!-- 标题 -->
               <h3 class="van-ellipsis">{{item.title}}</h3>
               <div class="img_box" v-if="item.cover.type ===3">
-                <van-image class="w33" fit="cover" :src="item.cover.images[0]" />
-                <van-image class="w33" fit="cover" :src="item.cover.images[1]" />
-                <van-image class="w33" fit="cover" :src="item.cover.images[2]" />
+                <van-image lazy-load class="w33" fit="cover" :src="item.cover.images[0]" />
+                <van-image lazy-load class="w33" fit="cover" :src="item.cover.images[1]" />
+                <van-image lazy-load class="w33" fit="cover" :src="item.cover.images[2]" />
               </div>
               <div class="img_box" v-if="item.cover.type ===1">
               <van-image class="w100" fit="cover" :src="item.cover.images[0]" />
@@ -23,8 +23,9 @@
               <div class="info_box">
                 <span>{{item.aut_name}}</span>
                 <span>{{item.comm_count}}评论</span>
-                <span>{{item.pubdate2}}</span>
-                <span class="close">
+                <span>{{item.pubdate | relTime}}</span>
+                <!-- 根据store的token来判断 -->
+                <span class="close" @click="$emit('showMore',item.art_id.toString())" v-if="$store.state.user.token">
                   <van-icon name="cross"></van-icon>
                 </span>
               </div>
@@ -40,7 +41,9 @@
 </template>
 
 <script>
+
 import { getArticles } from '@/api/articles'
+import eventBus from '@/utils/eventBus.js'
 export default {
   props: {
     channels_id: {
@@ -48,6 +51,23 @@ export default {
       type: Number, // 表示要传入的prop的属性的类型
       default: null // 默认值  假如没有传入prop 默认值就会使用
     }
+  },
+  created () {
+    eventBus.$on('delArticle', (artId, channelId) => {
+      //  如果自身的channel_id 跟参数相同 说明当前就是要删除数据的实例
+      if (this.channels_id === channelId) {
+        // 找到item里面的作者id 返回下标 然后删除下标对应的数据
+        const index = this.articles.findIndex(item => item.art_id.toString() === artId)
+        // 大于-1 表示数据存在
+        if (index > -1) {
+          this.articles.splice(index, 1)
+        }
+        if (this.articles.length === 0) {
+          // 数据被删完
+          this.onload() // 手动请求数据
+        }
+      }
+    })
   },
   data () {
     return {
