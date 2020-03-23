@@ -21,3 +21,17 @@ export function reportsArticle (data) {
     data
   })
 }
+// 获取联想搜索建议
+export function getSuggestion (params) {
+  return request({
+    url: '/suggestion',
+    params
+  })
+}
+// 搜索文章
+export function searchArticle (params) {
+  return request({
+    url: '/search',
+    params
+  })
+}
