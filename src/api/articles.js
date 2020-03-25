@@ -35,3 +35,25 @@ export function searchArticle (params) {
     params
   })
 }
+// 文章详情
+export function getArticleInfo (artId) {
+  return request({
+    url: `/articles/${artId}`
+  })
+}
+// 评论
+export function getComments (params) {
+  return request({
+    url: '/comments',
+    params
+  })
+}
+
+// 评论回复 1文章评论 2 评论的评论
+export function commentOrReply (data) {
+  return request({
+    url: '/comments',
+    method: 'post',
+    data
+  })
+}

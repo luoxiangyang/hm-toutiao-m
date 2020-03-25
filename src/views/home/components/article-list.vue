@@ -7,7 +7,8 @@
     <van-pull-refresh v-model="isLoading" @refresh="onrefresh" :success-text="successText">
       <van-list finished-text="我也是有底线的" v-model="upLoading" :finished="finished" @load="onload">
         <van-cell-group>
-          <van-cell v-for="item in articles" :key="item.art_id.toString()">
+          <!-- van-cell加to属性可以跳转对应路由 传参 -->
+          <van-cell :to="`/article?artId=${item.art_id.toString()}`" v-for="item in articles" :key="item.art_id.toString()">
             <!-- 三张图 -->
             <div class="article_item">
               <!-- 标题 -->
@@ -25,7 +26,7 @@
                 <span>{{item.comm_count}}评论</span>
                 <span>{{item.pubdate | relTime}}</span>
                 <!-- 根据store的token来判断 -->
-                <span class="close" @click="$emit('showMore',item.art_id.toString())" v-if="$store.state.user.token">
+                <span class="close" @click.stop="$emit('showMore',item.art_id.toString())" v-if="$store.state.user.token">
                   <van-icon name="cross"></van-icon>
                 </span>
               </div>
