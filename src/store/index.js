@@ -9,7 +9,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: auth.getUser()// token信息对象
+    user: auth.getUser(), // token信息对象
+    photo: null
   },
   mutations: {
     uploadUser (state, payload) {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     delUser (state) {
       state.user = {} // 将vuex中的token设置为空
       auth.delUser() // 删除本地
+    },
+    uploadPhoto (state, payload) {
+      state.photo = payload.photo
     }
   },
   actions: {

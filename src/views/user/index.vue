@@ -2,24 +2,24 @@
   <div class="container">
         <div class="user-profile">
       <div class="info">
-        <van-image round src="https://img.yzcdn.cn/vant/cat.jpeg" />
+        <van-image round :src="UserInfo.photo" />
         <h3 class="name">
-          用户名
+          {{UserInfo.name}}
           <br />
           <van-tag size="mini">申请认证</van-tag>
         </h3>
       </div>
       <van-row>
         <van-col span="8">
-          <p>0</p>
+          <p>{{UserInfo.art_count}}</p>
           <p>动态</p>
         </van-col>
         <van-col span="8">
-          <p>0</p>
+          <p>{{UserInfo.follow_count}}</p>
           <p>关注</p>
         </van-col>
         <van-col span="8">
-          <p>0</p>
+          <p>{{UserInfo.fans_count}}</p>
           <p>粉丝</p>
         </van-col>
       </van-row>
@@ -40,14 +40,45 @@
       <van-cell icon="edit" title="编辑资料" to="/user/profile" is-link />
       <van-cell icon="chat-o" title="小智同学" to="/user/chat" is-link />
       <van-cell icon="setting-o" title="系统设置" is-link />
-      <van-cell icon="warning-o" title="退出登录" to="/login" is-link />
+      <van-cell @click="lgout" icon="warning-o" title="退出登录"  is-link />
     </van-cell-group>
   </div>
 </template>
 
 <script>
+import { getUserInfo } from '@/api/user'
+import { mapMutations } from 'vuex'
 export default {
+  data () {
+    return {
+      UserInfo: {}
+    }
+  },
+  methods: {
+    ...mapMutations(['delUser', 'uploadPhoto']),
+    async lgout () {
+      // 退出
+      // 清除token
+      try {
+        await this.$dialog.confirm({
+          message: '确定退出登录吗'
+        })
+        this.delUser()
+        this.$router.push('/login')
+      } catch (error) {
 
+      }
+    },
+    async getUserInfo () {
+      const data = await getUserInfo()
+      this.UserInfo = data
+      // 在vuex设置头像
+      this.uploadPhoto({ photo: this.UserInfo.photo })
+    }
+  },
+  created () {
+    this.getUserInfo()
+  }
 }
 </script>
 

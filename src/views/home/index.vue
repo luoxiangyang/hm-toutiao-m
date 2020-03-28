@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <van-tabs v-model="activeIndex">
+    <van-tabs v-model="activeIndex" @change="changeTab">
       <van-tab   v-for="item in channels" :key="item.id" :title="item.name">
         <!-- 接收子组件的时间 showMore -->
         <ArticleList @showMore="openMore" :channels_id="item.id"> </ArticleList>
@@ -40,6 +40,11 @@ export default {
     }
   },
   methods: {
+    changeTab () {
+      // 切换页签事件
+      // 切换页签时广播一个消息 让对应的页签文章列表去滚动他的滚动条
+      eventBus.$emit('changeTab', this.channels[this.activeIndex].id)
+    },
     // 添加频道
     async addChannel (channel) {
       await addChannel(channel)

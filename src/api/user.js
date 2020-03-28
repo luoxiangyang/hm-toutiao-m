@@ -27,3 +27,31 @@ export function UnfollowUser (autid) {
     method: 'delete'
   })
 }
+export function getUserInfo () {
+  return request({
+    url: '/user'
+
+  })
+}
+//  获取用户资料
+export function getUserProfile () {
+  return request({
+    url: '/user/profile'
+  })
+}
+// /user/photo
+export function uploadPhoto (data) {
+  return request({
+    url: '/user/photo',
+    method: 'patch',
+    data
+  })
+}
+
+export function saveUser (data) {
+  return request({
+    url: '/user/profile',
+    method: 'patch',
+    data: { ...data, photo: null }
+  })
+}

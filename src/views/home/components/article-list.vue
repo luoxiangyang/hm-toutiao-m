@@ -1,7 +1,7 @@
 <template>
   <!-- 首页的列表 -->
   <!-- 上拉加载   放这个div为了形成滚动条 -->
-  <div class="scroll-wrapper">
+  <div class="scroll-wrapper" @scroll="remember" ref="myscroll">
     <!-- van-list 组件不加干涉 初始化完毕就会检测自己距离底部的长度如果超过了限定就会
     执行loading事件 自动把upLoading改撑true-->
     <van-pull-refresh v-model="isLoading" @refresh="onrefresh" :success-text="successText">
@@ -51,6 +51,7 @@ export default {
       required: true, // 此属性为必填项 为true 就是必填
       type: Number, // 表示要传入的prop的属性的类型
       default: null // 默认值  假如没有传入prop 默认值就会使用
+
     }
   },
   created () {
@@ -69,6 +70,17 @@ export default {
         }
       }
     })
+    eventBus.$on('changeTab', (id) => {
+      if (id === this.channels_id) {
+        this.$nextTick(
+          () => {
+            if (this.scrollTop && this.$refs.myscroll) {
+              this.$refs.myscroll.scrollTop = this.scrollTop
+            }
+          }
+        )
+      }
+    })
   },
   data () {
     return {
@@ -77,10 +89,21 @@ export default {
       finished: false, // 是否已经完成所有数据的加载
       articles: [],
       isLoading: false,
-      timestamp: null // 用来存历史时间戳
+      timestamp: null, // 用来存历史时间戳
+      scrollTop: 0 // 定义虚拟dom滚动的位置
+
     }
   },
   methods: {
+    remember (event) {
+      // 用防抖监听滚动事件
+      clearTimeout(this.Timer)
+      this.Timer = setTimeout(() => {
+        // 记录滚动的位置
+        // console.log(event.target)
+        this.scrollTop = event.target.scrollTop
+      }, 500)
+    },
     async onrefresh () {
       // setTimeout(() => {
       //   const Arr = Array.from(Array(2), (value, index) => index + 10)
@@ -131,6 +154,14 @@ export default {
       } else {
         this.finished = true
       }
+    }
+  },
+  activated () {
+    // 激活函数 没有删除dom的时候 再次点开会调用acticated
+    if (this.$refs.myscroll && this.scrollTop) {
+      // 判断滚动位置是否有
+      // 如果有就滚动为原来的位置
+      this.$refs.myscroll.scrollTop = this.scrollTop
     }
   }
 }

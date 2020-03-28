@@ -11,7 +11,10 @@
     ></van-nav-bar>
     <!-- 二级路由容器 -->
     <div class="my-wrapper" :class="{noTop: $route.path === `/user`}">
-      <router-view></router-view>
+    <!-- 缓存二级路由 让他不被销毁 -->
+     <keep-alive>
+        <router-view></router-view>
+     </keep-alive>
     </div>
 
     <!-- 标签栏 -->
