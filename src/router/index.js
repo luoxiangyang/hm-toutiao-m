@@ -20,7 +20,8 @@ const routes = [
     component: Layout,
     children: [{
       path: '', // 默认二级路由的组件
-      component: home
+      component: home,
+      meta: { isAlive: true }
     }, {
       path: '/question',
       component: question
